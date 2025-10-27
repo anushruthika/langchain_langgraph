@@ -35,10 +35,30 @@ def chat():
     from langchain_google_vertexai import ChatVertexAI
     model = ChatVertexAI(model_name="gemini-2.5-pro")
 
+def prompt_template_func():
+    from langchain_core.prompts import PromptTemplate
+    from langchain_google_vertexai import ChatVertexAI
 
+    og_inp="Tell me a joke about {topic}"
+    # prompt_template = PromptTemplate.from_template(og_inp)
+    # prompt_template.invoke({"topic": "cats"})
+    about="cat"
+
+    summary_prompt_template = PromptTemplate(
+        input_variables=["topic"], template=og_inp
+    )
+    model = ChatVertexAI(model_name="gemini-2.5-pro",temperature=1)
+    # llm = ChatOllama(temperature=0, model="gemma3:270m")
+    # llm = ChatOpenAI(temperature=0, model="gpt-5")
+    chain = summary_prompt_template | model
+
+    response = chain.invoke(input={"topic": about})
+    print(response.content)
+    pass
 ############################################################################################################
 
 if __name__ == "__main__":
-    simple()
+    # simple()
+    prompt_template_func()
         
 
